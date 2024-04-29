@@ -14,7 +14,7 @@ class NextVisit(Dataset):
         self.code = dataframe[code]
         self.age = dataframe[age]
         self.label = dataframe[label]
-        self.patid = dataframe.patid
+        self.patid = dataframe.SUBJECT_ID
 
         self.age2idx = age2idx
 

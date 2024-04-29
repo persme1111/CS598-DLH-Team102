@@ -5,7 +5,7 @@ import torch
 
 
 class MLMLoader(Dataset):
-    def __init__(self, dataframe, token2idx, age2idx, max_len, code='code', age='age'):
+    def __init__(self, dataframe, token2idx, age2idx, max_len, code='ICD9_CODE', age='AGE'):
         self.vocab = token2idx
         self.max_len = max_len
         self.code = dataframe[code]
