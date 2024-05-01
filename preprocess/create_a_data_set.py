@@ -153,3 +153,43 @@ file_path = './CS598_PROJECT/output/dataset.pkl'
 # Save the DataFrame to a pickle file using pandas
 diagnoses_grouped_final.to_pickle(file_path)
 
+
+# NextXVisit: train test split
+# Remove the last observation for each subject
+dataset_NextXVisit_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR_INDEX': list, 'AGE': list, 'DOB': 'first'}).reset_index()
+
+dataset_NextXVisit_label = dataset_NextXVisit_grouped.groupby(['SUBJECT_ID']).tail(1).reset_index(drop = True)
+dataset_NextXVisit_value = dataset_NextXVisit_grouped.groupby(['SUBJECT_ID']).apply(lambda group: group.iloc[:-1]).reset_index(drop = True)
+dataset_NextXVisit_label.columns = ['SUBJECT_ID', 'ADMITTIME', 'ICD9_CODE_LABEL', 'AGE', 'DOB']
+dataset_NextXVisit_value.columns = ['SUBJECT_ID', 'ADMITTIME', 'ICD9_CODE', 'AGE', 'DOB']
+
+# dataset_NextXVisit_grouped.head(5)
+
+dataset_NextXVisit_value_final = dataset_NextXVisit_value[["SUBJECT_ID", "ADMITTIME", "DOB", "ICD9_CODE", "AGE"]]
+
+dataset_NextXVisit_value_final["NEW_AGE"] = dataset_NextXVisit_value_final['AGE'].apply(lambda x: x + [x[0]])
+dataset_NextXVisit_value_final["NEW_ICD9_CODE"] = dataset_NextXVisit_value_final["ICD9_CODE"].apply(lambda x: x + ["SEP"])
+
+dataset_NextXVisit_value_final = dataset_NextXVisit_value_final.sort_values(by=['ADMITTIME'], ascending=True).groupby(['SUBJECT_ID']).agg({'NEW_ICD9_CODE': list, 'NEW_AGE': list}).reset_index()
+dataset_NextXVisit_value_final["ICD9_CODE"] = dataset_NextXVisit_value_final["NEW_ICD9_CODE"].apply(lambda nested_list: [item for sublist in nested_list for item in sublist])
+dataset_NextXVisit_value_final["AGE"] = dataset_NextXVisit_value_final["NEW_AGE"].apply(lambda nested_list: [item for sublist in nested_list for item in sublist])
+dataset_NextXVisit_value_final.drop(["NEW_ICD9_CODE", "NEW_AGE"], axis = 1, inplace=True)
+dataset_NextXVisit_value_final.columns = ['SUBJECT_ID', 'ICD9_CODE', 'AGE']
+
+dataset_NextXVisit = pd.merge(dataset_NextXVisit_value_final, dataset_NextXVisit_label.loc[:,["SUBJECT_ID", "ICD9_CODE_LABEL"]], on='SUBJECT_ID', how='left')
+
+
+train_index = dataset_NextXVisit.loc[:, "SUBJECT_ID"].sample(200, random_state=59)
+NextXVisit_train = dataset_NextXVisit.iloc[train_index.index, :]
+NextXVisit_test = dataset_NextXVisit.iloc[~dataset_NextXVisit.index.isin(train_index.index), :]
+
+NextXVisit_file_path = './CS598_PROJECT/output/NextXVisitdataset.pkl'
+NextXVisit_test_file_path = './CS598_PROJECT/output/NextXVisit_train.pkl'
+NextXVisit_train_file_path = './CS598_PROJECT/output/NextXVisit_test.pkl'
+
+
+# Save the DataFrame to a pickle file using pandas
+dataset_NextXVisit.to_pickle(NextXVisit_file_path)
+NextXVisit_train.to_pickle(NextXVisit_train_file_path)
+NextXVisit_test.to_pickle(NextXVisit_test_file_path)
+
