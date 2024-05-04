@@ -123,7 +123,7 @@ df = df.reset_index(drop = True)
 
 # group by date
 diagnoses = df.sort_values(by=['SUBJECT_ID', 'ADMITTIME'])
-diagnoses_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR_INDEX': list, 'AGE': list, 'DOB': 'first'}).reset_index()
+diagnoses_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR': list, 'AGE': list, 'DOB': 'first'}).reset_index()
 diagnoses_grouped.columns = ['SUBJECT_ID', 'ADMITTIME', 'ICD9_CODE', 'AGE', 'DOB']
 
 # diagnoses_grouped.head(20)
@@ -156,7 +156,7 @@ diagnoses_grouped_final.to_pickle(file_path)
 
 # NextXVisit: train test split
 # Remove the last observation for each subject
-dataset_NextXVisit_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR_INDEX': list, 'AGE': list, 'DOB': 'first'}).reset_index()
+dataset_NextXVisit_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR': list, 'AGE': list, 'DOB': 'first'}).reset_index()
 
 dataset_NextXVisit_label = dataset_NextXVisit_grouped.groupby(['SUBJECT_ID']).tail(1).reset_index(drop = True)
 dataset_NextXVisit_value = dataset_NextXVisit_grouped.groupby(['SUBJECT_ID']).apply(lambda group: group.iloc[:-1]).reset_index(drop = True)
@@ -180,8 +180,8 @@ dataset_NextXVisit = pd.merge(dataset_NextXVisit_value_final, dataset_NextXVisit
 
 
 train_index = dataset_NextXVisit.loc[:, "SUBJECT_ID"].sample(200, random_state=59)
-NextXVisit_train = dataset_NextXVisit.iloc[train_index.index, :]
-NextXVisit_test = dataset_NextXVisit.iloc[~dataset_NextXVisit.index.isin(train_index.index), :]
+NextXVisit_train = dataset_NextXVisit.iloc[train_index.index, :].reset_index()
+NextXVisit_test = dataset_NextXVisit.iloc[~dataset_NextXVisit.index.isin(train_index.index), :].reset_index()
 
 NextXVisit_file_path = './CS598_PROJECT/output/NextXVisitdataset.pkl'
 NextXVisit_test_file_path = './CS598_PROJECT/output/NextXVisit_train.pkl'
@@ -193,3 +193,6 @@ dataset_NextXVisit.to_pickle(NextXVisit_file_path)
 NextXVisit_train.to_pickle(NextXVisit_train_file_path)
 NextXVisit_test.to_pickle(NextXVisit_test_file_path)
 
+print(NextXVisit_train['AGE'].max())
+
+print(NextXVisit_test.head())

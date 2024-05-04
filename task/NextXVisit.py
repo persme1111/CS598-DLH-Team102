@@ -31,8 +31,8 @@ warnings.filterwarnings(action='ignore')
 
 file_config = {
     'vocab': './CS598_PROJECT/output/token2idx', # token2idx idx2token
-    'train': './CS598_PROJECT/output/dataset.pkl',
-    'test': './CS598_PROJECT/output/dataset.pkl',
+    'train': './CS598_PROJECT/output/NextXVisit_train.pkl',
+    'test': './CS598_PROJECT/output/NextXVisit_test.pkl',
 }
 
 optim_config = {
@@ -51,7 +51,7 @@ global_params = {
     'max_age': 110,
     'age_year': False,
     'age_symbol': None,
-    'min_visit': 5
+    'min_visit':3
 }
 
 pretrain_model_path = './CS598_PROJECT/modeloutput/MLM_MODEL'  # pretrained MLM path
@@ -117,14 +117,14 @@ class BertConfig(Bert.modeling.BertConfig):
 
 
 train = pd.read_pickle(file_config['train'])
-Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=train, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE')
+Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=train, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE_LABEL')
 trainload = DataLoader(dataset=Dset, batch_size=global_params['batch_size'], shuffle=True, num_workers=3)
-
+# print("train", Dset.__getitem__(0))
 
 test = pd.read_pickle(file_config['test'])
-Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=test, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE')
+Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=test, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE_LABEL')
 testload = DataLoader(dataset=Dset, batch_size=global_params['batch_size'], shuffle=False, num_workers=3)
-
+# print('test', Dset.__getitem__(0))
 
 # del model
 conf = BertConfig(model_config)
@@ -263,6 +263,6 @@ for e in range(50):
 
         torch.save(model_to_save.state_dict(), output_model_file)
         best_pre = aps
-    print('aps : {}'.format(aps))
+    print("aps: {}\t| auroc: {}".format(aps, roc))
 
 
