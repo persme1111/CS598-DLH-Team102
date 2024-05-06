@@ -8,7 +8,7 @@ import os
 from sklearn.metrics.pairwise import cosine_similarity
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
-sys.path.append('/home/liyang/github repos/CS598_PROJECT-20240428/CS598_PROJECT')
+sys.path.append('/home/bohu/github repos/CS598_PROJECT-20240428/CS598_PROJECT')
 
 global_params = {
     'batch_size': 256,
