@@ -1,0 +1,101 @@
+epoch: epoch	| cnt: cnt	|Loss: loss	| precision: precision	| time: time
+epoch: 0	| cnt: 1	|Loss: 0.0035551607608795164	| precision: 0.0008	| time: 0.75
+epoch: 0	 | Loss: 0.023983692064774405	| time: 3.0401759147644043
+epoch: 1	| cnt: 1	|Loss: 0.002638589382171631	| precision: 0.0708	| time: 0.54
+epoch: 1	 | Loss: 0.020167681691242983	| time: 2.9995861053466797
+epoch: 2	| cnt: 1	|Loss: 0.002502751588821411	| precision: 0.0694	| time: 0.54
+epoch: 2	 | Loss: 0.01958209905033887	| time: 3.0031046867370605
+epoch: 3	| cnt: 1	|Loss: 0.0024582531452178955	| precision: 0.0756	| time: 0.57
+epoch: 3	 | Loss: 0.019402067933093986	| time: 2.9846787452697754
+epoch: 4	| cnt: 1	|Loss: 0.00241684365272522	| precision: 0.0799	| time: 0.58
+epoch: 4	 | Loss: 0.01928638860706063	| time: 3.1229047775268555
+epoch: 5	| cnt: 1	|Loss: 0.002403735876083374	| precision: 0.0872	| time: 0.56
+epoch: 5	 | Loss: 0.019255879962504496	| time: 3.0658462047576904
+epoch: 6	| cnt: 1	|Loss: 0.002442706823348999	| precision: 0.0798	| time: 0.52
+epoch: 6	 | Loss: 0.019209613389484813	| time: 3.10341215133667
+epoch: 7	| cnt: 1	|Loss: 0.002404930353164673	| precision: 0.0916	| time: 0.52
+epoch: 7	 | Loss: 0.019014639262661413	| time: 3.04495906829834
+epoch: 8	| cnt: 1	|Loss: 0.0024070496559143065	| precision: 0.0963	| time: 0.50
+epoch: 8	 | Loss: 0.018724296563741787	| time: 3.072742462158203
+epoch: 9	| cnt: 1	|Loss: 0.002329941987991333	| precision: 0.1305	| time: 0.62
+epoch: 9	 | Loss: 0.018507533715881947	| time: 3.0518476963043213
+epoch: 10	| cnt: 1	|Loss: 0.0023181967735290527	| precision: 0.1374	| time: 0.49
+epoch: 10	 | Loss: 0.018512428678035608	| time: 3.0058138370513916
+epoch: 11	| cnt: 1	|Loss: 0.0023114774227142336	| precision: 0.1471	| time: 0.50
+epoch: 11	 | Loss: 0.018377733902192453	| time: 3.001420736312866
+epoch: 12	| cnt: 1	|Loss: 0.002284533739089966	| precision: 0.1443	| time: 0.57
+epoch: 12	 | Loss: 0.018305139974999104	| time: 3.0778958797454834
+epoch: 13	| cnt: 1	|Loss: 0.002337244749069214	| precision: 0.1260	| time: 0.56
+epoch: 13	 | Loss: 0.018313680023327172	| time: 3.053912401199341
+epoch: 14	| cnt: 1	|Loss: 0.0022148823738098143	| precision: 0.1574	| time: 0.59
+epoch: 14	 | Loss: 0.018221286709816126	| time: 3.052760601043701
+epoch: 15	| cnt: 1	|Loss: 0.002304523468017578	| precision: 0.1248	| time: 0.53
+epoch: 15	 | Loss: 0.01816186694556527	| time: 3.145761728286743
+epoch: 16	| cnt: 1	|Loss: 0.00223112154006958	| precision: 0.1502	| time: 0.57
+epoch: 16	 | Loss: 0.01804144129675815	| time: 3.069798469543457
+epoch: 17	| cnt: 1	|Loss: 0.0023448660373687744	| precision: 0.1291	| time: 0.51
+epoch: 17	 | Loss: 0.01804644954416811	| time: 3.0675723552703857
+epoch: 18	| cnt: 1	|Loss: 0.002246387720108032	| precision: 0.1476	| time: 0.49
+epoch: 18	 | Loss: 0.017941822753508866	| time: 3.0319058895111084
+epoch: 19	| cnt: 1	|Loss: 0.0022063124179840087	| precision: 0.1564	| time: 0.50
+epoch: 19	 | Loss: 0.017807082232724408	| time: 2.987506628036499
+epoch: 20	| cnt: 1	|Loss: 0.002236263275146484	| precision: 0.1513	| time: 0.52
+epoch: 20	 | Loss: 0.01788166612822294	| time: 3.0292441844940186
+epoch: 21	| cnt: 1	|Loss: 0.0022566177845001222	| precision: 0.1538	| time: 0.50
+epoch: 21	 | Loss: 0.017843934788274347	| time: 3.025394916534424
+epoch: 22	| cnt: 1	|Loss: 0.002227731466293335	| precision: 0.1533	| time: 0.49
+epoch: 22	 | Loss: 0.017762304904642746	| time: 3.1392438411712646
+epoch: 23	| cnt: 1	|Loss: 0.002222634553909302	| precision: 0.1435	| time: 0.59
+epoch: 23	 | Loss: 0.017720191807560612	| time: 3.115772247314453
+epoch: 24	| cnt: 1	|Loss: 0.002189493179321289	| precision: 0.1511	| time: 0.56
+epoch: 24	 | Loss: 0.017646923871107504	| time: 3.1593353748321533
+epoch: 25	| cnt: 1	|Loss: 0.00223770809173584	| precision: 0.1535	| time: 0.58
+epoch: 25	 | Loss: 0.017561757371300814	| time: 3.0422604084014893
+epoch: 26	| cnt: 1	|Loss: 0.002259457588195801	| precision: 0.1504	| time: 0.58
+epoch: 26	 | Loss: 0.01759322862374222	| time: 3.0413219928741455
+epoch: 27	| cnt: 1	|Loss: 0.002182027816772461	| precision: 0.1578	| time: 0.49
+epoch: 27	 | Loss: 0.017573848861726776	| time: 3.0789268016815186
+epoch: 28	| cnt: 1	|Loss: 0.0022053070068359373	| precision: 0.1498	| time: 0.55
+epoch: 28	 | Loss: 0.017542820993079297	| time: 3.0278480052948
+epoch: 29	| cnt: 1	|Loss: 0.002230041742324829	| precision: 0.1584	| time: 0.60
+epoch: 29	 | Loss: 0.01753789352794103	| time: 3.0428202152252197
+epoch: 30	| cnt: 1	|Loss: 0.0021912901401519775	| precision: 0.1613	| time: 0.56
+epoch: 30	 | Loss: 0.017548275728856762	| time: 3.04952335357666
+epoch: 31	| cnt: 1	|Loss: 0.002156147003173828	| precision: 0.1649	| time: 0.56
+epoch: 31	 | Loss: 0.0174589788156591	| time: 3.0480382442474365
+epoch: 32	| cnt: 1	|Loss: 0.002154074668884277	| precision: 0.1579	| time: 0.57
+epoch: 32	 | Loss: 0.017391764100739022	| time: 3.131782293319702
+epoch: 33	| cnt: 1	|Loss: 0.00218618106842041	| precision: 0.1537	| time: 0.48
+epoch: 33	 | Loss: 0.017416222121466547	| time: 3.028510570526123
+epoch: 34	| cnt: 1	|Loss: 0.002191751718521118	| precision: 0.1548	| time: 0.57
+epoch: 34	 | Loss: 0.017416063598138107	| time: 3.088188886642456
+epoch: 35	| cnt: 1	|Loss: 0.0021946728229522705	| precision: 0.1551	| time: 0.54
+epoch: 35	 | Loss: 0.017379736855978538	| time: 3.0222599506378174
+epoch: 36	| cnt: 1	|Loss: 0.002173671007156372	| precision: 0.1780	| time: 0.49
+epoch: 36	 | Loss: 0.01728881263935658	| time: 3.0191566944122314
+epoch: 37	| cnt: 1	|Loss: 0.0022190098762512205	| precision: 0.1543	| time: 0.53
+epoch: 37	 | Loss: 0.017315560251418942	| time: 3.069427490234375
+epoch: 38	| cnt: 1	|Loss: 0.0021842665672302244	| precision: 0.1581	| time: 0.58
+epoch: 38	 | Loss: 0.017244426107393945	| time: 2.964073896408081
+epoch: 39	| cnt: 1	|Loss: 0.002174060106277466	| precision: 0.1489	| time: 0.57
+epoch: 39	 | Loss: 0.01722662441913606	| time: 3.0701820850372314
+epoch: 40	| cnt: 1	|Loss: 0.0021922950744628906	| precision: 0.1650	| time: 0.55
+epoch: 40	 | Loss: 0.017245333846693117	| time: 3.0389370918273926
+epoch: 41	| cnt: 1	|Loss: 0.0022192099094390867	| precision: 0.1376	| time: 0.58
+epoch: 41	 | Loss: 0.01721536951625154	| time: 3.0403921604156494
+epoch: 42	| cnt: 1	|Loss: 0.0021552700996398926	| precision: 0.1691	| time: 0.59
+epoch: 42	 | Loss: 0.01722016133053202	| time: 3.047913074493408
+epoch: 43	| cnt: 1	|Loss: 0.0021226744651794433	| precision: 0.1593	| time: 0.61
+epoch: 43	 | Loss: 0.017246041182599866	| time: 3.054903268814087
+epoch: 44	| cnt: 1	|Loss: 0.002129884719848633	| precision: 0.1606	| time: 0.59
+epoch: 44	 | Loss: 0.01708874834239594	| time: 3.032785415649414
+epoch: 45	| cnt: 1	|Loss: 0.002124720573425293	| precision: 0.1737	| time: 0.55
+epoch: 45	 | Loss: 0.017141512534480888	| time: 2.983264684677124
+epoch: 46	| cnt: 1	|Loss: 0.0021114654541015626	| precision: 0.1657	| time: 0.54
+epoch: 46	 | Loss: 0.017086810074744628	| time: 3.0785813331604004
+epoch: 47	| cnt: 1	|Loss: 0.002214022397994995	| precision: 0.1539	| time: 0.59
+epoch: 47	 | Loss: 0.017095845904465595	| time: 3.1279122829437256
+epoch: 48	| cnt: 1	|Loss: 0.0020831470489501955	| precision: 0.1625	| time: 0.56
+epoch: 48	 | Loss: 0.01710816687990179	| time: 3.189333438873291
+epoch: 49	| cnt: 1	|Loss: 0.002057404518127441	| precision: 0.1737	| time: 0.57
+epoch: 49	 | Loss: 0.017032414207488907	| time: 2.9783217906951904
