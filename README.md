@@ -12,14 +12,22 @@ We perform the following tasks and an ablation study to understand feature impor
    *  preprocess/create_a_data_set.py
    *  task/MLM.py
  
+      The data output and model output is at output/ and modeloutput/ respectively.
+      
 *  For the downstream multilabel prediction of diagnosis code, run the following code in order:
    *  preprocess/create_a_data_set.py
    *  task/MLM.py
    *  task/NextXVisit.py
- 
+
+      The data output and model output is at output/ and modeloutput/ respectively.
+  
 * For data visualization of feature embedding (diagnosis code), run the following code in order:
     * visualization/t_SNE.py
-    
+      
+* For ablation study, run the following code in order:
+    * preprocess/create_data_set_ablation_delete_age.py
+    *  task/MLM_ablation_delete_age.py
+    * task/NextXVisit_ablation_delete_age.py
 ## Preprocess
 * Code at preprocess/create_a_data_set.py
 
