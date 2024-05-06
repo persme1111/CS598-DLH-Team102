@@ -7,7 +7,18 @@ The main task is to predict the multilabel of disease diagnosis of next visit gi
 We perform the following tasks and an ablation study to understand feature importance.
   * pre-trained masked language model for input features embedding 
   * downstream multilabel prediction of diagnosis code
-
+## How to run each task
+* For the pre-trained MLM, run the following code in order:
+   *  preprocess/create_a_data_set.py
+   *  task/MLM.py
+ 
+*  For the downstream multilabel prediction of diagnosis code, run the following code in order:
+   *  preprocess/create_a_data_set.py
+   *  task/MLM.py
+   *  task/NextXVisit.py
+ 
+* For data visualization of feature embedding (diagnosis code), run the following code in order:
+    * visualization/t_SNE.py
     
 ## Preprocess
 * Code at preprocess/create_a_data_set.py
