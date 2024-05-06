@@ -8,7 +8,7 @@ import os
 from sklearn.metrics.pairwise import cosine_similarity
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
-sys.path.append('/home/bohu/github repos/CS598_PROJECT-20240428/CS598_PROJECT')
+sys.path.append('/home/liyang/github repos/CS598_PROJECT-20240428/CS598_PROJECT')
 
 global_params = {
     'batch_size': 256,
@@ -95,10 +95,10 @@ idx2token = numpy_array['idx2token']
 
 
 nextxvisit = load_model(NextXVisit_model_file)
-tmp = nextxvisit['bert.embeddings.word_embeddings.weight'].detach().cpu().numpy()
+embedding_data = nextxvisit['bert.embeddings.word_embeddings.weight'].detach().cpu().numpy()
 
 model = load_model(MLM_model_file)
-embedding_data = model['bert.embeddings.word_embeddings.weight'].detach().cpu().numpy()
+tmp = model['bert.embeddings.word_embeddings.weight'].detach().cpu().numpy()
 
 
 similarities = cosine_similarity(tmp, embedding_data)
