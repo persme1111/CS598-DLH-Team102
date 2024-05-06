@@ -5,10 +5,13 @@ Our project is a reproducible work on the original paper '[BEHRT: Transformer fo
 The main task is to predict the multilabel of disease diagnosis of next visit given a patient's past visits on the MIMIC-III.
 
 ## Preprocess
-- preprocess/create_a_data_set.py
+### preprocess/create_a_data_set.py
 
-MLM Task
-- 
+## MLM Task
+### dataLoader/MLM.py
+### model/MLM.py
+### modeloutput/MLM_LOG
+### modeloutput/MLM_MODEL
 
 NextXVisit
 -
