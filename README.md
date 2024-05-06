@@ -4,9 +4,9 @@ Our project is a reproducible work on the original paper '[BEHRT: Transformer fo
 
 The main task is to predict the multilabel of disease diagnosis of next visit given a patient's past visits on the MIMIC-III.
 
-We perform the following tasks and an ablation study to understand feature importance.
-  - pre-trained masked language model for input features embedding 
-  - downstream multilabel prediction of diagnosis code
+# We perform the following tasks and an ablation study to understand feature importance.
+  ## pre-trained masked language model for input features embedding 
+  ## downstream multilabel prediction of diagnosis code
 
 
 
