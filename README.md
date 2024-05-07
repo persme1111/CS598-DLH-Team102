@@ -1,4 +1,5 @@
 # CS598-DLH-Team102
+[Final Descriptive Notebook Report](Final Descriptive Notebook Report)
 
 Our project is a reproducible work on the original paper '[BEHRT: Transformer for Electronic Health Records](https://www.nature.com/articles/s41598-020-62922-y)' 
 
@@ -7,6 +8,7 @@ The main task is to predict the multilabel of disease diagnosis of next visit gi
 We perform the following tasks and an ablation study to understand feature importance.
   * pre-trained masked language model for input features embedding 
   * downstream multilabel prediction of diagnosis code
+
 ## How to run each task
 * For the pre-trained MLM, run the following code in order:
    *  preprocess/create_a_data_set.py
