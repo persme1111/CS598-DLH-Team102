@@ -1,5 +1,5 @@
 # CS598-DLH-Team102
-[Final Descriptive Notebook Report](Final Descriptive Notebook Report)
+[Final Descriptive Notebook Report](https://colab.research.google.com/drive/16gPDbmvg9Gw_OexvgwI7Co0oLd0m37K5?authuser=2#scrollTo=Rt-EtirHCFzY)
 
 Our project is a reproducible work on the original paper '[BEHRT: Transformer for Electronic Health Records](https://www.nature.com/articles/s41598-020-62922-y)' 
 
