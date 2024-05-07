@@ -47,7 +47,9 @@ class NextVisit(Dataset):
         age = seq_padding(age, self.max_len, token2idx=self.age2idx)
 
         tokens, code = code2index(code, self.vocab)
+        # print("before code2idx", label)
         _, label = code2index(label, self.label_vocab)
+        # print("after code2idx", label)
 
         # get position code and segment code
         tokens = seq_padding(tokens, self.max_len)

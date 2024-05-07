@@ -17,6 +17,8 @@ import torch
 import time
 import torch.nn as nn
 import os
+import pickle
+
 
 class BertConfig(Bert.modeling.BertConfig):
     def __init__(self, config):
@@ -63,7 +65,7 @@ global_params = {
     'max_age': 110,
     'month': 1,
     'age_symbol': None,
-    'min_visit': 3,
+    'min_visit': 2,
     'gradient_accumulation_steps': 1
 }
 
@@ -139,7 +141,7 @@ def cal_acc(label, pred):
     return precision
 
 
-def train(e, loader):
+def train(e, loader, f):
     tr_loss = 0
     temp_loss = 0
     nb_tr_examples, nb_tr_steps = 0, 0
@@ -150,6 +152,8 @@ def train(e, loader):
         cnt +=1
         batch = tuple(t.to(train_params['device']) for t in batch)
         age_ids, input_ids, posi_ids, segment_ids, attMask, masked_label = batch
+        # print('masked_label', masked_label.shape)
+        # print(masked_label)
         loss, pred, label = model(input_ids, age_ids, segment_ids, posi_ids,attention_mask=attMask, masked_lm_labels=masked_label)
         if global_params['gradient_accumulation_steps'] >1:
             loss = loss/global_params['gradient_accumulation_steps']
@@ -163,7 +167,18 @@ def train(e, loader):
 
         if step % 200==0:
             print("epoch: {}\t| cnt: {}\t|Loss: {}\t| precision: {:.4f}\t| time: {:.2f}".format(e, cnt, temp_loss/2000, cal_acc(label, pred), time.time()-start))
+            
+            f.write("epoch: {}\t| cnt: {}\t|Loss: {}\t| precision: {:.4f}\t| time: {:.2f}\n".format(e, cnt, temp_loss/2000, cal_acc(label, pred), time.time()-start))
+
             temp_loss = 0
+
+            # Save the NumPy array to a pickle file
+            numpy_array = label.cpu().detach().numpy()
+            with open('./CS598_PROJECT/output/label.pickle', 'wb') as f:
+                pickle.dump(numpy_array, f)
+            numpy_array = pred.cpu().detach().numpy()
+            with open('./CS598_PROJECT/output/pred.pickle', 'wb') as f:
+                pickle.dump(numpy_array, f)
             start = time.time()
 
         if (step + 1) % global_params['gradient_accumulation_steps'] == 0:
@@ -181,9 +196,9 @@ def train(e, loader):
     return tr_loss, cost
 
 f = open(os.path.join(file_config['model_path'], file_config['file_name']), "w")
-f.write('{}\t{}\t{}\n'.format('epoch', 'loss', 'time'))
+f.write('epoch: {}\t| cnt: {}\t|Loss: {}\t| precision: {}\t| time: {}\n'.format('epoch', 'cnt', 'loss', 'precision', 'time'))
 for e in range(50):
-    loss, time_cost = train(e, trainload)
+    loss, time_cost = train(e, trainload, f)
     loss = loss/data.shape[0]
-    f.write('{}\t{}\t{}\n'.format(e, loss, time_cost))
+    f.write('epoch: {}\t | Loss: {}\t| time: {}\n'.format(e, loss, time_cost))
 f.close()

@@ -31,8 +31,8 @@ warnings.filterwarnings(action='ignore')
 
 file_config = {
     'vocab': './CS598_PROJECT/output/token2idx', # token2idx idx2token
-    'train': './CS598_PROJECT/output/dataset.pkl',
-    'test': './CS598_PROJECT/output/dataset.pkl',
+    'train': './CS598_PROJECT/output/NextXVisit_train.pkl',
+    'test': './CS598_PROJECT/output/NextXVisit_test.pkl',
 }
 
 optim_config = {
@@ -47,11 +47,12 @@ global_params = {
     'device': 'cuda:0',
     'output_dir': './CS598_PROJECT/modeloutput/', # output folder
     'best_name': 'NextXVisit',  # output model name
+    'log_name': 'NextXVisit_LOG',  # output log name
     'max_len_seq': 64,
     'max_age': 110,
     'age_year': False,
     'age_symbol': None,
-    'min_visit': 5
+    'min_visit':2
 }
 
 pretrain_model_path = './CS598_PROJECT/modeloutput/MLM_MODEL'  # pretrained MLM path
@@ -117,14 +118,14 @@ class BertConfig(Bert.modeling.BertConfig):
 
 
 train = pd.read_pickle(file_config['train'])
-Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=train, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE')
+Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=train, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE_LABEL')
 trainload = DataLoader(dataset=Dset, batch_size=global_params['batch_size'], shuffle=True, num_workers=3)
-
+# print("train", Dset.__getitem__(0))
 
 test = pd.read_pickle(file_config['test'])
-Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=test, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE')
+Dset = NextVisit(token2idx=BertVocab['token2idx'], label2idx=labelVocab, age2idx=ageVocab, dataframe=test, max_len=global_params['max_len_seq'], code='ICD9_CODE', age='AGE', label = 'ICD9_CODE_LABEL')
 testload = DataLoader(dataset=Dset, batch_size=global_params['batch_size'], shuffle=False, num_workers=3)
-
+# print('test', Dset.__getitem__(0))
 
 # del model
 conf = BertConfig(model_config)
@@ -177,7 +178,7 @@ mlb = MultiLabelBinarizer(classes=list(labelVocab.values()))
 mlb.fit([[each] for each in list(labelVocab.values())])
 
 
-def train(e):
+def train(e, f):
     model.train()
     tr_loss = 0
     temp_loss = 0
@@ -210,6 +211,7 @@ def train(e):
         if step % 500==0:
             prec, a, b = precision(logits, targets)
             print("epoch: {}\t| Cnt: {}\t| Loss: {}\t| precision: {}".format(e, cnt,temp_loss/500, prec))
+            f.write("epoch: {}\t| Cnt: {}\t| Loss: {}\t| precision: {}\n".format(e, cnt,temp_loss/500, prec))
             temp_loss = 0
         
         if (step + 1) % global_params['gradient_accumulation_steps'] == 0:
@@ -249,10 +251,10 @@ def evaluation():
     aps, roc, output, label = precision_test(y, y_label)
     return aps, roc, tr_loss
 
-
+f = open(os.path.join(global_params['output_dir'], global_params['log_name']), "w")
 best_pre = 0.0
-for e in range(50):
-    train(e)
+for e in range(100):
+    train(e, f)
     aps, roc, test_loss = evaluation()
     if aps >best_pre:
         # Save a trained model
@@ -263,6 +265,7 @@ for e in range(50):
 
         torch.save(model_to_save.state_dict(), output_model_file)
         best_pre = aps
-    print('aps : {}'.format(aps))
-
+    print("aps: {}\t| auroc: {}".format(aps, roc))
+    f.write("epoch: {} \t| aps: {}\t| auroc: {}\n".format(e, aps, roc))
+f.close()
 

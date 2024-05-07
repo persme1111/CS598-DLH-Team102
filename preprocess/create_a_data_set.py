@@ -59,12 +59,15 @@ def preprocess_medication(df):
 
 patient_raw = read_patient()
 patient_df = preprocess_patient(patient_raw)
+# print("patient:", patient_df["SUBJECT_ID"].nunique())
 
 visit_raw = read_visit()
 visit_df = preprocess_visit(visit_raw)
+# print("visit:", visit_df.shape)
 
 diagnosis_raw = read_diagnosis()
 diagnosis_df = preprocess_diagnosis(diagnosis_raw)
+# print("diagnosis", diagnosis_df.shape)
 
 medication_raw = read_medication()
 medication_df = preprocess_medication(medication_raw)
@@ -108,13 +111,17 @@ visit_df['ADMITTIME'] = pd.to_datetime(visit_df['ADMITTIME']).dt.date
 df = visit_df.merge(patient_df, on='SUBJECT_ID')
 df = df.merge(diagnosis_df, on=['SUBJECT_ID', 'HADM_ID'])
 df['AGE'] = (df['ADMITTIME'] - df['DOB']).apply(lambda x: int(x.days/365))
-subject_id_counts = df.groupby('SUBJECT_ID')['ADMITTIME'].nunique()
-# filter out the patient with less than 2 visits
-valid_subject_ids = subject_id_counts[subject_id_counts > 1].index
-df = df[df['SUBJECT_ID'].isin(valid_subject_ids)].copy()
+subject_id_counts = df.groupby('SUBJECT_ID')['ADMITTIME'].nunique().reset_index()
 
+# filter out the patient with less than 2 visits
+valid_subject_ids = subject_id_counts[subject_id_counts['ADMITTIME'] > 1]["SUBJECT_ID"]
+df = df[df['SUBJECT_ID'].isin(valid_subject_ids)].copy()
+# print("individual with > 1 visits", subject_id_counts[subject_id_counts > 2].shape)
 # Add ICD9_CODE
+
+print("before mapping icd9_code", df['ICD9_CODE'].nunique())
 df['ICD9_CODE_ANCESTOR'] = df['ICD9_CODE'].apply(icd9_ancestor)
+print("after mapping icd9_code", df['ICD9_CODE_ANCESTOR'].shape)
 df['ICD9_CODE_ANCESTOR_INDEX'] = df['ICD9_CODE_ANCESTOR'].apply(icd9_mapping)
 
 index = [False if isinstance(i, list) else True for i in df['ICD9_CODE_ANCESTOR_INDEX']]
@@ -123,7 +130,7 @@ df = df.reset_index(drop = True)
 
 # group by date
 diagnoses = df.sort_values(by=['SUBJECT_ID', 'ADMITTIME'])
-diagnoses_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR_INDEX': list, 'AGE': list, 'DOB': 'first'}).reset_index()
+diagnoses_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR': list, 'AGE': list, 'DOB': 'first'}).reset_index()
 diagnoses_grouped.columns = ['SUBJECT_ID', 'ADMITTIME', 'ICD9_CODE', 'AGE', 'DOB']
 
 # diagnoses_grouped.head(20)
@@ -137,14 +144,14 @@ diagnoses_final = diagnoses_grouped[["SUBJECT_ID", "ADMITTIME", "DOB", "ICD9_COD
 
 diagnoses_final["NEW_AGE"] = diagnoses_final['AGE'].apply(lambda x: x + [x[0]])
 diagnoses_final["NEW_ICD9_CODE"] = diagnoses_final["ICD9_CODE"].apply(lambda x: x + ["SEP"])
-# diagnoses_final.head(20)
+
 
 diagnoses_grouped_final = diagnoses_final.sort_values(by=['ADMITTIME'], ascending=True).groupby(['SUBJECT_ID']).agg({'NEW_ICD9_CODE': list, 'NEW_AGE': list}).reset_index()
 diagnoses_grouped_final["ICD9_CODE"] = diagnoses_grouped_final["NEW_ICD9_CODE"].apply(lambda nested_list: [item for sublist in nested_list for item in sublist])
 diagnoses_grouped_final["AGE"] = diagnoses_grouped_final["NEW_AGE"].apply(lambda nested_list: [item for sublist in nested_list for item in sublist])
 diagnoses_grouped_final.drop(["NEW_ICD9_CODE", "NEW_AGE"], axis = 1, inplace=True)
 diagnoses_grouped_final.columns = ['SUBJECT_ID', 'ICD9_CODE', 'AGE']
-#diagnoses_grouped_final.head(50)
+
 
 # diagnoses_grouped_final.to_csv('/content/drive/MyDrive/CS598_PROJECT/output/diagnoses.csv', index=False)
 # File path to save the pickle file
@@ -156,14 +163,13 @@ diagnoses_grouped_final.to_pickle(file_path)
 
 # NextXVisit: train test split
 # Remove the last observation for each subject
-dataset_NextXVisit_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR_INDEX': list, 'AGE': list, 'DOB': 'first'}).reset_index()
+dataset_NextXVisit_grouped = diagnoses.groupby(['SUBJECT_ID', 'ADMITTIME']).agg({'ICD9_CODE_ANCESTOR': list, 'AGE': list, 'DOB': 'first'}).reset_index()
 
 dataset_NextXVisit_label = dataset_NextXVisit_grouped.groupby(['SUBJECT_ID']).tail(1).reset_index(drop = True)
 dataset_NextXVisit_value = dataset_NextXVisit_grouped.groupby(['SUBJECT_ID']).apply(lambda group: group.iloc[:-1]).reset_index(drop = True)
 dataset_NextXVisit_label.columns = ['SUBJECT_ID', 'ADMITTIME', 'ICD9_CODE_LABEL', 'AGE', 'DOB']
 dataset_NextXVisit_value.columns = ['SUBJECT_ID', 'ADMITTIME', 'ICD9_CODE', 'AGE', 'DOB']
 
-# dataset_NextXVisit_grouped.head(5)
 
 dataset_NextXVisit_value_final = dataset_NextXVisit_value[["SUBJECT_ID", "ADMITTIME", "DOB", "ICD9_CODE", "AGE"]]
 
@@ -179,17 +185,21 @@ dataset_NextXVisit_value_final.columns = ['SUBJECT_ID', 'ICD9_CODE', 'AGE']
 dataset_NextXVisit = pd.merge(dataset_NextXVisit_value_final, dataset_NextXVisit_label.loc[:,["SUBJECT_ID", "ICD9_CODE_LABEL"]], on='SUBJECT_ID', how='left')
 
 
-train_index = dataset_NextXVisit.loc[:, "SUBJECT_ID"].sample(200, random_state=59)
-NextXVisit_train = dataset_NextXVisit.iloc[train_index.index, :]
-NextXVisit_test = dataset_NextXVisit.iloc[~dataset_NextXVisit.index.isin(train_index.index), :]
+# print(dataset_NextXVisit_grouped[~dataset_NextXVisit_grouped['SUBJECT_ID'].isin(dataset_NextXVisit_value_final['SUBJECT_ID'])])
+
+test_index = dataset_NextXVisit.loc[:, "SUBJECT_ID"].sample(200, random_state=59)
+NextXVisit_test = dataset_NextXVisit.iloc[test_index.index, :].reset_index()
+NextXVisit_train= dataset_NextXVisit.iloc[~dataset_NextXVisit.index.isin(test_index.index), :].reset_index()
 
 NextXVisit_file_path = './CS598_PROJECT/output/NextXVisitdataset.pkl'
-NextXVisit_test_file_path = './CS598_PROJECT/output/NextXVisit_train.pkl'
-NextXVisit_train_file_path = './CS598_PROJECT/output/NextXVisit_test.pkl'
-
+NextXVisit_train_file_path = './CS598_PROJECT/output/NextXVisit_train.pkl'
+NextXVisit_test_file_path = './CS598_PROJECT/output/NextXVisit_test.pkl'
 
 # Save the DataFrame to a pickle file using pandas
 dataset_NextXVisit.to_pickle(NextXVisit_file_path)
 NextXVisit_train.to_pickle(NextXVisit_train_file_path)
 NextXVisit_test.to_pickle(NextXVisit_test_file_path)
+
+print("train_NextXVisit", NextXVisit_train.shape)
+print("test_NextXVisit", NextXVisit_test.shape)
 
